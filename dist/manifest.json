@@ -1,27 +1,36 @@
 {
-    "name": "Code Insight",
-    "version": "0.1",
-    "manifest_version": 3,
-    "description": "Get a short summary of webpage content using Chrome's built-in summarization API.",
-    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0rGdYnMnAJm24F1aVoygD+UJtTtFkRfju36f2Pp3keQQU6fXHNrddqpfMZXb+E9YJmRz+2jJgeEbMSN4m8zFD/9NrbNmfUrCvvnu6id6o1cMtdRsFNvLDsvDfY895kQ9d8543q5TCmGt1NGFBgzSp8wORBQNOYXlAmtRh2Ru2+pMC/v8i5lirkMQbWKe7y+tr6aq95KrILc+TxZmujqoTd0Tay5sNp3jCafdSexo2dOnCUR369KLRnkrakaZ9Jzak5C2ysHwcgmsJwvenFCbET2AvHjiHLGDDWNCQ+FYwzlMOnJCOjDskWur8XAGozKKYpPXtJ88BYfuPu80QXfZaQIDAQAB",
-    "trial_tokens": [
-      "AkGcfoMTs5K71isPlCiY033XA9HKSjUJvPCF6K56eqY7mAUAsR7NDbmIWDjomLgCREuOS38XAuafVTz209utDwQAAABzeyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vamdrYm1sZmZlYWRtZWZqZmdrY2tmYnBja3Bvb2loY2UiLCJmZWF0dXJlIjoiQUlTdW1tYXJpemF0aW9uQVBJIiwiZXhwaXJ5IjoxNzUzMTQyNDAwfQ=="
-    ],
-    "background": {
-      "service_worker": "background.js"
+  "name": "Code Insight",
+  "version": "0.2",
+  "manifest_version": 3,
+  "description": "Get a short summary of webpage content using Chrome's built-in summarization API, with Google Translate support.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0rGdYnMnAJm24F1aVoygD+UJtTtFkRfju36f2Pp3keQQU6fXHNrddqpfMZXb+E9YJmRz+2jJgeEbMSN4m8zFD/9NrbNmfUrCvvnu6id6o1cMtdRsFNvLDsvDfY895kQ9d8543q5TCmGt1NGFBgzSp8wORBQNOYXlAmtRh2Ru2+pMC/v8i5lirkMQbWKe7y+tr6aq95KrILc+TxZmujqoTd0Tay5sNp3jCafdSexo2dOnCUR369KLRnkrakaZ9Jzak5C2ysHwcgmsJwvenFCbET2AvHjiHLGDDWNCQ+FYwzlMOnJCOjDskWur8XAGozKKYpPXtJ88BYfuPu80QXfZaQIDAQAB",
+  "trial_tokens": [
+    "AiD+IH0DC++9Nb32dxJHW4mVFK4s5+jq9fjwHQyEMdxI+N5A3RjDf8j3zUGVUXBQeghxnXJXht5yyPql2Z/YiQQAAABceyJvcmlnaW4iOiJodHRwczovL2Nocm9tZS1leHRlbnNpb246NDQzIiwiZmVhdHVyZSI6IkFJU3VtbWFyaXphdGlvbkFQSSIsImV4cGlyeSI6MTc1MzE0MjQwMH0="
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "tabs",
+    "scripting",
+    "sidePanel",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*",
+    "https://translate.googleapis.com/"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "action": {
+    "default_icon": {
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
     },
-    "permissions": ["tabs", "scripting", "sidePanel", "storage"],
-    "host_permissions": ["http://*/*", "https://*/*"],
-    "side_panel": {
-      "default_path": "sidepanel/index.html"
-    },
-    "action": {
-      "default_icon": {
-        "16": "images/icon.png",
-        "32": "images/icon.png",
-        "48": "images/icon.png",
-        "128": "images/icon.png"
-      },
-      "default_title": "Generate a summary"
-    }
+    "default_title": "Generate a summary"
   }
+}

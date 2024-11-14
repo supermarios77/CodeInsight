@@ -4053,18 +4053,18 @@
   _Parser.parse;
   _Lexer.lex;
 
-  // The underlying model has a context of 1,024 tokens, out of which 26 are used by the internal prompt,
-  // leaving about 998 tokens for the input text. Each token corresponds, roughly, to about 4 characters, so 4,000
-  // is used as a limit to warn the user the content might be too long to summarize.
   const MAX_MODEL_CHARS = 4000;
 
   let pageContent = '';
+  let lastSummary = '';
 
-  const summaryElement = document.body.querySelector('#summary');
-  const warningElement = document.body.querySelector('#warning');
+  const summaryElement = document.querySelector('#summary-content');
+  const warningElement = document.querySelector('#warning');
   const summaryTypeSelect = document.querySelector('#type');
   const summaryFormatSelect = document.querySelector('#format');
   const summaryLengthSelect = document.querySelector('#length');
+  const targetLanguageSelect = document.querySelector('#target-language');
+  const themeToggle = document.querySelector('#theme-toggle');
 
   function onConfigChange() {
     const oldContent = pageContent;
@@ -4072,7 +4072,7 @@
     onContentChange(oldContent);
   }
 
-  [summaryTypeSelect, summaryFormatSelect, summaryLengthSelect].forEach((e) =>
+  [summaryTypeSelect, summaryFormatSelect, summaryLengthSelect, targetLanguageSelect].forEach((e) =>
     e.addEventListener('change', onConfigChange)
   );
 
@@ -4087,7 +4087,7 @@
 
   async function onContentChange(newContent) {
     if (pageContent == newContent) {
-      // no new content, do nothing
+      // No new content, do nothing
       return;
     }
     pageContent = newContent;
@@ -4102,6 +4102,7 @@
       }
       showSummary('Loading...');
       summary = await generateSummary(newContent);
+      lastSummary = summary;
     } else {
       summary = "There's nothing to summarize";
     }
@@ -4114,7 +4115,7 @@
         {
           type: summaryTypeSelect.value,
           format: summaryFormatSelect.value,
-          length: length.value
+          length: summaryLengthSelect.value
         },
         (message, progress) => {
           console.log(`${message} (${progress.loaded}/${progress.total})`);
@@ -4153,16 +4154,74 @@
   }
 
   async function showSummary(text) {
+    summaryElement.style.opacity = '0';
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    if (targetLanguageSelect.value && text !== "Loading...") {
+      text = await translateText(text, targetLanguageSelect.value);
+    }
+    
     summaryElement.innerHTML = purify.sanitize(marked.parse(text));
+    summaryElement.style.opacity = '1';
   }
 
   async function updateWarning(warning) {
-    warningElement.textContent = warning;
     if (warning) {
-      warningElement.removeAttribute('hidden');
+      warningElement.textContent = warning;
+      warningElement.style.display = 'block';
+      warningElement.style.opacity = '0';
+      await new Promise(resolve => setTimeout(resolve, 10));
+      warningElement.style.opacity = '1';
     } else {
-      warningElement.setAttribute('hidden', '');
+      warningElement.style.opacity = '0';
+      await new Promise(resolve => setTimeout(resolve, 300));
+      warningElement.style.display = 'none';
     }
   }
+
+  async function translateText(text, targetLanguage) {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLanguage}&dt=t&q=${encodeURIComponent(text)}`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data[0].map(x => x[0]).join('');
+    } catch (error) {
+      console.error('Translation error:', error);
+      return text;
+    }
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+    
+    document.body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
+    setTimeout(() => {
+      document.body.style.transition = '';
+    }, 500);
+  }
+
+  const savedTheme = localStorage.getItem('darkMode');
+  if (savedTheme === 'true') {
+    document.body.classList.add('dark');
+  }
+
+  themeToggle.addEventListener('click', toggleDarkMode);
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  targetLanguageSelect.addEventListener('change', async () => {
+    if (lastSummary) {
+      showSummary(lastSummary);
+    }
+  });
 
 })();
