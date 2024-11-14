@@ -5,7 +5,7 @@
   --card-foreground: hsl(222.2, 84%, 4.9%);
   --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(222.2, 84%, 4.9%);
-  --primary: hsl(222.2, 47.4%, 11.2%);
+  --primary: hsl(221.2, 83.2%, 53.3%);
   --primary-foreground: hsl(210, 40%, 98%);
   --secondary: hsl(210, 40%, 96.1%);
   --secondary-foreground: hsl(222.2, 47.4%, 11.2%);
@@ -17,9 +17,8 @@
   --destructive-foreground: hsl(210, 40%, 98%);
   --border: hsl(214.3, 31.8%, 91.4%);
   --input: hsl(214.3, 31.8%, 91.4%);
-  --ring: hsl(222.2, 84%, 4.9%);
+  --ring: hsl(221.2, 83.2%, 53.3%);
   --radius: 0.5rem;
-  --highlight: hsl(47, 100%, 50%);
 }
 
 .dark {
@@ -29,7 +28,7 @@
   --card-foreground: hsl(210, 40%, 98%);
   --popover: hsl(222.2, 84%, 4.9%);
   --popover-foreground: hsl(210, 40%, 98%);
-  --primary: hsl(210, 40%, 98%);
+  --primary: hsl(217.2, 91.2%, 59.8%);
   --primary-foreground: hsl(222.2, 47.4%, 11.2%);
   --secondary: hsl(217.2, 32.6%, 17.5%);
   --secondary-foreground: hsl(210, 40%, 98%);
@@ -41,8 +40,7 @@
   --destructive-foreground: hsl(210, 40%, 98%);
   --border: hsl(217.2, 32.6%, 17.5%);
   --input: hsl(217.2, 32.6%, 17.5%);
-  --ring: hsl(212.7, 26.8%, 83.9%);
-  --highlight: hsl(47, 100%, 50%);
+  --ring: hsl(224.3, 76.3%, 48%);
 }
 
 * {
@@ -58,13 +56,12 @@ body {
   line-height: 1.5;
   font-size: 16px;
   transition: background-color 0.3s ease, color 0.3s ease;
-  padding: 1.5rem;
 }
 
 .container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -79,25 +76,54 @@ header {
   border-bottom: 2px solid var(--border);
 }
 
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 h1 {
-  font-size: 1.8rem;
+  font-size: 2.5rem;
   font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .highlight {
-  color: var(--highlight);
+  color: var(--primary);
+  position: relative;
+  display: inline-block;
 }
 
-button {
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-color: var(--primary);
+  opacity: 0.3;
+  z-index: -1;
+  transition: height 0.3s ease;
+}
+
+.highlight:hover::after {
+  height: 100%;
+}
+
+.icon-button {
   background: none;
   border: none;
   cursor: pointer;
   color: var(--foreground);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
 }
 
-button:hover {
+.icon-button:hover {
   transform: scale(1.1);
+  color: var(--primary);
+  background-color: var(--accent);
 }
 
 .card {
@@ -120,25 +146,35 @@ button:hover {
   color: var(--primary);
 }
 
+.setting-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
 .setting {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  flex-direction: column;
 }
 
 label {
   font-weight: 500;
+  margin-bottom: 0.5rem;
 }
 
 select {
-  width: 60%;
+  width: 100%;
   padding: 0.5rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background-color: var(--background);
   color: var(--foreground);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
 }
 
 select:focus {
@@ -155,18 +191,30 @@ select:focus {
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(var(--destructive), 0.4);
+      box-shadow: 0 0 0 0 rgba(var(--destructive), 0.4);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(var(--destructive), 0);
+      box-shadow: 0 0 0 10px rgba(var(--destructive), 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(var(--destructive), 0);
+      box-shadow: 0 0 0 0 rgba(var(--destructive), 0);
   }
 }
 
 .summary {
   background-color: var(--muted);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 #summary-content {
@@ -185,22 +233,92 @@ footer {
   color: var(--muted-foreground);
 }
 
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+  padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
 @media (max-width: 640px) {
   .container {
-    padding: 0.75rem;
+      padding: 0.75rem;
   }
 
   .card {
-    padding: 1rem;
+      padding: 1rem;
   }
 
-  .setting {
-    flex-direction: column;
-    align-items: flex-start;
+  .setting-group {
+      grid-template-columns: 1fr;
   }
+}
 
-  select {
-    width: 100%;
-    margin-top: 0.5rem;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.setting {
+  animation: fadeIn 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.setting:nth-child(1) { animation-delay: 0.1s; }
+.setting:nth-child(2) { animation-delay: 0.2s; }
+.setting:nth-child(3) { animation-delay: 0.3s; }
+.setting:nth-child(4) { animation-delay: 0.4s; }
+
+/* Loading animation */
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.loading svg {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+.loading circle {
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes dash {
+  0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+  }
+  50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+  }
+  100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
   }
 }
