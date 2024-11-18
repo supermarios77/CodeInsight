@@ -14,7 +14,8 @@
     "tabs",
     "scripting",
     "sidePanel",
-    "storage"
+    "storage",
+    "contextMenus" 
   ],
   "host_permissions": [
     "http://*/*",

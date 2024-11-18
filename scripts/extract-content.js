@@ -2,7 +2,7 @@ import { isProbablyReaderable, Readability } from '@mozilla/readability';
 
 function canBeParsed(document) {
   return isProbablyReaderable(document, {
-    minContentLength: 100
+    minContentLength: 1000
   });
 }
 

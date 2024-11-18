@@ -2466,7 +2466,7 @@ var readabilityExports = requireReadability();
 
 function canBeParsed(document) {
   return readabilityExports.isProbablyReaderable(document, {
-    minContentLength: 100
+    minContentLength: 1000
   });
 }
 
