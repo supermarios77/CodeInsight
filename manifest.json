@@ -1,5 +1,5 @@
 {
-  "name": "Code Insight",
+  "name": "QuickSum",
   "version": "0.2",
   "manifest_version": 3,
   "description": "Get a short summary of webpage content using Chrome's built-in summarization API, with Google Translate support.",
